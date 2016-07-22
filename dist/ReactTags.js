@@ -24,7 +24,8 @@ var DefaultClassNames = {
     tagName: 'ReactTags__tagName',
     suggestions: 'ReactTags__suggestions',
     isActive: 'is-active',
-    isDisabled: 'is-disabled'
+    isDisabled: 'is-disabled',
+    isFocused: 'is-focused'
 };
 
 module.exports = React.createClass({
@@ -193,6 +194,10 @@ module.exports = React.createClass({
         }
     },
 
+    handleFocus: function handleFocus() {
+        this.setState({ focused: !this.state.focused });
+    },
+
     addTag: function addTag(tag) {
         if (tag.disabled) {
             return;
@@ -227,6 +232,7 @@ module.exports = React.createClass({
         var selectedIndex = _state2.selectedIndex;
         var suggestions = _state2.suggestions;
         var classNames = _state2.classNames;
+        var focused = _state2.focused;
         var _props = this.props;
         var placeholder = _props.placeholder;
         var minQueryLength = _props.minQueryLength;
@@ -235,9 +241,15 @@ module.exports = React.createClass({
         var listboxId = 'ReactTags-listbox';
         var selectedId = listboxId + '-' + selectedIndex;
 
+        var rootClasses = [classNames.root, focused ? classNames.isFocused : ''];
+
         return React.createElement(
             'div',
-            { className: classNames.root, onClick: this.handleClick },
+            {
+                className: rootClasses.join(' '),
+                onClick: this.handleClick,
+                onFocus: this.handleFocus,
+                onBlur: this.handleFocus },
             React.createElement(
                 'div',
                 { className: classNames.selected, 'aria-live': 'polite', 'aria-relevant': 'additions removals' },
